@@ -93,7 +93,10 @@
 
     <string id="30088">Location to store movie STRMs (optional) </string>
     <string id="30089">Location to store tv show STRMs (optional) </string>
-
+    
+    <string id="30090">Clear STRMs</string>
+    <string id="30091">Do you want to clear all saved STRM files?</string>
+    <string id="30092">Do you want to cleanup your Library?</string>
 
     <string id="30100">This feature is not supported on your version of XBMC / KODI</string>
 

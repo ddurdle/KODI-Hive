@@ -775,7 +775,7 @@ elif mode == 'video' or mode == 'audio':
         service
     except NameError:
         xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052), addon.getLocalizedString(30053))
-        log(aaddon.getLocalizedString(30050)+ 'hive-login', True)
+        log(addon.getLocalizedString(30050)+ 'hive-login', True)
         xbmcplugin.endOfDirectory(plugin_handle)
 
     playbackType = 0
@@ -887,7 +887,7 @@ elif mode == 'requestencoding':
             service
     except NameError:
             xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052), addon.getLocalizedString(30053))
-            log(aaddon.getLocalizedString(30050)+ 'hive-login', True)
+            log(addon.getLocalizedString(30050)+ 'hive-login', True)
             xbmcplugin.endOfDirectory(plugin_handle)
 
     mediaFile = file.file(filename, title, '', 0, '','')
@@ -914,7 +914,7 @@ elif mode == 'photo':
             service
     except NameError:
             xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052), addon.getLocalizedString(30053))
-            log(aaddon.getLocalizedString(30050)+ 'hive-login', True)
+            log(addon.getLocalizedString(30050)+ 'hive-login', True)
             xbmcplugin.endOfDirectory(plugin_handle)
 
 
@@ -972,7 +972,7 @@ elif mode == 'streamurl':
             service
     except NameError:
             xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052), addon.getLocalizedString(30053))
-            log(aaddon.getLocalizedString(30050)+ 'hive-login', True)
+            log(addon.getLocalizedString(30050)+ 'hive-login', True)
             xbmcplugin.endOfDirectory(plugin_handle)
 
     url = re.sub('---', '&', url)
@@ -983,10 +983,36 @@ elif mode == 'streamurl':
 
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
+#clear strm files
+elif mode == 'clearstrm':
+    returnPrompt = xbmcgui.Dialog().yesno(addon.getLocalizedString(30000), addon.getLocalizedString(30091))
+    if returnPrompt:
+        import shutil
 
-if mode == 'options' or mode == 'buildstrm' or mode == 'clearauth':
+        delpath_list = [
+                addon.getSetting('strm_path'),
+                addon.getSetting('movies_path'),
+                addon.getSetting('tvshows_path')
+            ]
+
+        for delpath in delpath_list:
+            if delpath != '':
+                try:
+                    for root, dirs, files in os.walk(delpath):
+                        for f in files:
+                            os.unlink(os.path.join(root, f))
+                        for d in dirs:
+                            shutil.rmtree(os.path.join(root, d))
+                except: pass
+
+        returnPrompt = xbmcgui.Dialog().yesno(addon.getLocalizedString(30000), addon.getLocalizedString(30092))
+        if returnPrompt:
+            xbmc.executebuiltin('CleanLibrary(video)')
+
+if mode == 'options' or mode == 'buildstrm' or mode == 'clearauth' or mode == 'clearstrm':
     addMenu(PLUGIN_URL+'?mode=clearauth','<<'+addon.getLocalizedString(30018)+'>>')
     addMenu(PLUGIN_URL+'?mode=buildstrm','<<'+addon.getLocalizedString(30025)+'>>')
+    addMenu(PLUGIN_URL+'?mode=clearstrm','<<'+addon.getLocalizedString(30090)+'>>')
     addMenu(PLUGIN_URL+'?mode=createsearch','<<Save Search>>')
 
 
